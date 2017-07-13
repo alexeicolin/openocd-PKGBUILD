@@ -15,9 +15,10 @@ url='http://openocd.org/'
 license=('GPL')
 depends=('libftdi' 'libftdi-compat' 'libusb' 'libusb-compat' 'hidapi')
 options=(!strip)
-_features=(amtjtagaccel armjtagew buspirate ftdi gw16012 jlink oocd_trace
+_features_off=(amtjtagaccel armjtagew buspirate ftdi gw16012 jlink oocd_trace
  opendous osbdm parport presto_libftdi remote-bitbang rlink stlink ti-icdi ulink usbprog vsllink
- aice cmsis-dap dummy jtag_vpi openjtag_ftdi usb-blaster-2 usb_blaster_libftdi bcm2835gpio)
+ aice cmsis-dap dummy jtag_vpi openjtag_ftdi usb-blaster-2 usb_blaster_libftdi)
+_features_on=(bcm2835gpio)
 source=(https://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-${pkgver/_/-}.tar.bz2
         'aarch64.patch')
 sha256sums=('7312e7d680752ac088b8b8f2b5ba3ff0d30e0a78139531847be4b75c101316ae'
@@ -33,7 +34,7 @@ build() {
   cd $pkgname-${pkgver/_/-}
   libtoolize
   autoreconf
-  ./configure --prefix=/usr ${_features[@]/#/--enable-} --disable-werror
+  ./configure --prefix=/usr ${_features_off[@]/#/--disable-} ${_features_on[@]/#/--enable-} --disable-werror
   make
 }
 
