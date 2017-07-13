@@ -10,20 +10,23 @@ pkgver=0.10.0
 epoch=1
 pkgrel=1
 pkgdesc='Debugging, in-system programming and boundary-scan testing for embedded target devices'
-arch=('i686' 'x86_64')
+arch=('i686' 'x86_64' 'armv7h' 'aarch64')
 url='http://openocd.org/'
 license=('GPL')
 depends=('libftdi' 'libftdi-compat' 'libusb' 'libusb-compat' 'hidapi')
 options=(!strip)
 _features=(amtjtagaccel armjtagew buspirate ftdi gw16012 jlink oocd_trace
  opendous osbdm parport presto_libftdi remote-bitbang rlink stlink ti-icdi ulink usbprog vsllink
- aice cmsis-dap dummy jtag_vpi openjtag_ftdi usb-blaster-2 usb_blaster_libftdi)
-source=(https://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-${pkgver/_/-}.tar.bz2)
-sha256sums=('7312e7d680752ac088b8b8f2b5ba3ff0d30e0a78139531847be4b75c101316ae')
+ aice cmsis-dap dummy jtag_vpi openjtag_ftdi usb-blaster-2 usb_blaster_libftdi bcm2835gpio)
+source=(https://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-${pkgver/_/-}.tar.bz2
+        'aarch64.patch')
+sha256sums=('7312e7d680752ac088b8b8f2b5ba3ff0d30e0a78139531847be4b75c101316ae'
+            'd98345604cd840630d02fe00d7981f9163be5eab1c90cc25e96887ae2367714f')
 
 prepare() {
   cd $pkgname-${pkgver/_/-}
   sed -i 's|ftdi_new();|(void*)12345;|g' configure{,.ac}
+  patch -p1 < ../aarch64.patch
 }
 
 build() {
